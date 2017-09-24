@@ -19,7 +19,7 @@ public class WorkWithFile {
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line = null;
-            while((line = bufferedReader.readLine()) != null || stopMain != false) {
+            while((line = bufferedReader.readLine()) != null && stopMain != false) {
                 //System.out.println(line);
                 stopMain = writeTheWords.parseString(line);
             }

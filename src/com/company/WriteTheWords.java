@@ -20,7 +20,7 @@ public class WriteTheWords {
             return false;
         }
         char[] charArray = null;
-        line = line.replaceAll(",$", "");
+        line = line.replaceAll(",", "");
         String[] result = line.split(" ");
         for(String word: result) {
             charArray = word.toCharArray();
