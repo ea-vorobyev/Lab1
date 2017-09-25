@@ -1,13 +1,12 @@
 package com.company;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 
 public class WorkWithFile {
+
     private File file;
     private WriteTheWords writeTheWords;
-    private boolean stopMain = true;
+    private boolean stopMain;
 
     public WorkWithFile(File file, WriteTheWords writeTheWords) {
         this.file = file;
@@ -19,14 +18,12 @@ public class WorkWithFile {
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line = null;
-            while((line = bufferedReader.readLine()) != null && stopMain != false) {
-                //System.out.println(line);
+            while((line = bufferedReader.readLine()) != null && !stopMain) {
                 stopMain = writeTheWords.parseString(line);
             }
             bufferedReader.close();
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
