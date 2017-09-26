@@ -2,7 +2,7 @@ package com.company;
 
 import java.io.File;
 
-public class Main {
+public class Main extends Thread{
 
     public static void main(String[] args) {
         WriteTheWords writeTheWords = new WriteTheWords();
@@ -10,7 +10,10 @@ public class Main {
 
         for(int i = 0; i<args.length; i++) {
             fileArray[i] = new File(args[i]);
-            new Thread(new MyRunnable(new WorkWithFile(fileArray[i], writeTheWords))).start();
+            new Thread(
+                    new MyRunnable(
+                            new WorkWithFile(fileArray[i], writeTheWords)))
+                    .start();
         }
     }
 

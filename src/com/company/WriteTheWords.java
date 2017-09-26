@@ -5,57 +5,57 @@ import java.util.Map;
 
 public class WriteTheWords {
     private Map<String, Integer> words;
-    private boolean stopMain;
+    private boolean stopStream;
     private int inc;
 
     public WriteTheWords() {
         this.words = new HashMap<String, Integer>();
     }
 
-    public void setWords(Map<String, Integer> words) {
-        this.words = words;
-    }
-
-    public Map<String, Integer> getWords() {
-        return words;
-    }
-
     private String replace(String line) {
-        line = line.replaceAll(",", "");
         line = line.replaceAll("[0-9]+","");
-        //остальные символы
+        line = line.replaceAll("[^А-Яа-яёA-Za-z]", " ");
         return line;
     }
 
-    public synchronized boolean parseString(String line) {
+    private synchronized void getWords() {
+        System.out.println(words + " " + inc);
+    }
+
+    private synchronized void addWord(String word) {
+        if(!word.equals("")) {
+            inc++;
+            Integer value = words.get(word);
+            if(value == null) {
+                words.put(word, 1);
+            }
+            else {
+                words.put(word, ++value);
+            }
+        }
+    }
+
+    public boolean parseString(String line) {
         line = replace(line);
         String[] result = line.split(" ");
         for(String word: result) {
-            inc++;
             char[] charArray = word.toCharArray();
             for(char c: charArray) {
-                int u = (int) c;
-                if(((u >= 65) && (u <= 90)) || ((u >= 97) && (u <= 122))) {
+                int charIndex = (int) c;
+                if(((charIndex >= 65) && (charIndex <= 90)) || ((charIndex >= 97) && (charIndex <= 122))) {
                     System.out.println("Найден иностранный символ " + " '" + c + "' ");
-                    stopMain = true;
+                    stopStream = true;
                     return true;
                 }
             }
-            if(stopMain) {
-                return stopMain;
+            if(stopStream) {
+                return stopStream;
             }
-            //synchronized (this) {
-                Integer value = words.get(word);
-                if(value == null) {
-                    words.put(word, 1);
-                }
-                else {
-                    words.put(word, ++value);
-                }
-            //}
+            addWord(word);
         }
-        System.out.println(getWords() + " " + inc);
-        return stopMain;
+        //System.out.println(words); //ConcurrentModificationException
+        getWords();
+        return stopStream;
     }
 
 }
